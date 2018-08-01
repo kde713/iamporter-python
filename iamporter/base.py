@@ -6,7 +6,7 @@ __all__ = ['IamportResponse',
            'IamportAuth',
            'BaseApi', ]
 
-IAMPORT_API_URL = "https://api.iamport.kr/"
+IAMPORT_API_URL = "https://api.iamport.kr"
 
 
 class IamportResponse:
@@ -118,6 +118,21 @@ class BaseApi:
         self.iamport_auth = auth
         self.requests_session = session
         self.imp_url = imp_url
+
+    def _build_params(self, **kwargs):
+        """__bool__ 값이 True인 value를 가진 key만 포함된 dict를 반환합니다.
+
+        Args:
+            **kwargs
+
+        Returns:
+            dict
+        """
+        params = {}
+        for key, value in kwargs.items():
+            if value:
+                params[key] = value
+        return params
 
     def _get(self, endpoint, **kwargs):
         """GET 요청을 보내고 그 결과를 IamportResponse 객체로 리턴합니다.
