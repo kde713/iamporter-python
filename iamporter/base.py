@@ -1,12 +1,12 @@
 import requests
 from requests.auth import AuthBase
 
+from .consts import IAMPORT_API_URL
+
 __all__ = ['IamportResponse',
            'IamportError', 'IamportUnAuthorized',
            'IamportAuth',
            'BaseApi', ]
-
-IAMPORT_API_URL = "https://api.iamport.kr"
 
 
 class IamportResponse:
