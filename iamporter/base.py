@@ -2,11 +2,9 @@ import requests
 from requests.auth import AuthBase
 
 from .consts import IAMPORT_API_URL
+from .errors import ImpUnAuthorized
 
-__all__ = ['IamportResponse',
-           'IamportError', 'IamportUnAuthorized',
-           'IamportAuth',
-           'BaseApi', ]
+__all__ = ['IamportResponse', 'IamportAuth', 'BaseApi', ]
 
 
 class IamportResponse:
@@ -46,24 +44,6 @@ class IamportResponse:
         }
 
 
-class IamportError(Exception):
-    """아임포트 API 오류
-
-    Attributes:
-        response (IamportResponse): API 응답 객체
-    """
-
-    def __init__(self, response):
-        self.response = response
-
-
-class IamportUnAuthorized(IamportError):
-    """아임포트 인증실패 오류"""
-
-    def __init__(self, response):
-        super().__init__(response)
-
-
 class IamportAuth(AuthBase):
     """아임포트 인증 객체
 
@@ -93,7 +73,7 @@ class IamportAuth(AuthBase):
             self.token = auth_response.data.get('access_token', None)
 
         if self.token is None:
-            raise IamportUnAuthorized(auth_response)
+            raise ImpUnAuthorized(auth_response.message)
 
     def __call__(self, r):
         r.headers['Authorization'] = self.token
