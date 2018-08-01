@@ -121,12 +121,12 @@ class BaseApi:
 
     def _get(self, endpoint, **kwargs):
         if isinstance(self.requests_session, requests.Session):
-            return self.requests_session.get(self.imp_url + endpoint, params=kwargs)
+            return self.requests_session.get(self.imp_url + endpoint, auth=self.iamport_auth, params=kwargs)
         else:
-            return requests.get(self.imp_url + endpoint, params=kwargs)
+            return requests.get(self.imp_url + endpoint, auth=self.iamport_auth, params=kwargs)
 
     def _post(self, endpoint, **kwargs):
         if isinstance(self.requests_session, requests.Session):
-            return self.requests_session.post(self.imp_url + endpoint, data=kwargs)
+            return self.requests_session.post(self.imp_url + endpoint, auth=self.iamport_auth, data=kwargs)
         else:
-            return requests.post(self.imp_url + endpoint, data=kwargs)
+            return requests.post(self.imp_url + endpoint, auth=self.iamport_auth, data=kwargs)
