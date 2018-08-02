@@ -1,9 +1,11 @@
 from .base import IamportResponse, BaseApi
 
-__all__ = ["Payments", ]
+__all__ = ["Payments", "Subscribe"]
 
 
 class Payments(BaseApi):
+    NAMESPACE = "payments"
+
     def get_balance(self, imp_uid):
         """결제수단별 금액 상세 정보 확인
         아임포트 고유번호로 결제수단별 금액 상세정보를 확인합니다.(현재, PAYCO결제수단에 한해 제공되고 있습니다.)
@@ -14,7 +16,7 @@ class Payments(BaseApi):
         Returns:
             IamportResponse
         """
-        return self._get('/payments/{imp_uid}/balance'.format(imp_uid=imp_uid))
+        return self._get('/{imp_uid}/balance'.format(imp_uid=imp_uid))
 
     def get(self, imp_uid):
         """아임포트 고유번호로 결제내역을 확인합니다
@@ -25,7 +27,7 @@ class Payments(BaseApi):
         Returns:
             IamportResponse
         """
-        return self._get('/payments/{imp_uid}'.format(imp_uid=imp_uid))
+        return self._get('/{imp_uid}'.format(imp_uid=imp_uid))
 
     def get_find(self, merchant_uid, payment_status=None, sorting=None):
         """가맹점지정 고유번호로 결제내역을 확인합니다
@@ -42,8 +44,8 @@ class Payments(BaseApi):
         """
         payment_status = "/" + payment_status if payment_status else ""
         params = self._build_params(sorting=sorting)
-        return self._get('/payments/find/{merchant_uid}{payment_status}'.format(merchant_uid=merchant_uid,
-                                                                                payment_status=payment_status),
+        return self._get('/find/{merchant_uid}{payment_status}'.format(merchant_uid=merchant_uid,
+                                                                       payment_status=payment_status),
                          **params)
 
     def get_findall(self, merchant_uid, payment_status=None, page=None, sorting=None):
@@ -60,8 +62,8 @@ class Payments(BaseApi):
         """
         payment_status = "/" + payment_status if payment_status else ""
         params = self._build_params(page=page, sorting=sorting)
-        return self._get('/payments/findAll/{merchant_uid}{payment_status}'.format(merchant_uid=merchant_uid,
-                                                                                   payment_status=payment_status),
+        return self._get('/findAll/{merchant_uid}{payment_status}'.format(merchant_uid=merchant_uid,
+                                                                          payment_status=payment_status),
                          **params)
 
     def get_status(self, payment_status, page=None, limit=None, search_from=None, search_to=None, sorting=None):
@@ -83,7 +85,7 @@ class Payments(BaseApi):
         """
         params = self._build_params(
             **{'page': page, 'limit': limit, 'from': search_from, 'to': search_to, 'sorting': sorting})
-        return self._get('/payments/status/{payment_status}'.format(payment_status=payment_status), **params)
+        return self._get('/status/{payment_status}'.format(payment_status=payment_status), **params)
 
     def post_cancel(self, imp_uid=None, merchant_uid=None, amount=None, tax_free=None, checksum=None, reason=None,
                     refund_holder=None, refund_bank=None, refund_account=None):
@@ -115,4 +117,78 @@ class Payments(BaseApi):
             'refund_bank': refund_bank,
             'refund_account': refund_account,
         })
-        return self._post('/payments/cancel', **params)
+        return self._post('/cancel', **params)
+
+
+class Subscribe(BaseApi):
+    NAMESPACE = "subscribe"
+
+    def get_customers(self, customer_uid):
+        """구매자의 빌링키 정보 조회
+
+        Args:
+            customer_uid (str): 구매자 고유 번호
+
+        Returns:
+            IamportResponse
+        """
+        return self._get('/customers/{customer_uid}'.format(customer_uid=customer_uid))
+
+    def post_customers(self, customer_uid, card_number, expiry, birth, pwd_2dight=None, pg=None,
+                       customer_name=None, customer_tel=None, customer_email=None, customer_addr=None,
+                       customer_postcode=None):
+        """구매자에 대해 빌링키 발급 및 저장
+
+        Args:
+            customer_uid (str): 구매자 고유 번호
+            card_number (str): 카드번호 (dddd-dddd-dddd-dddd)
+            expiry (str): 카드 유효기간 (YYYY-MM)
+            birth (str): 생년월일6자리 (법인카드의 경우 사업자등록번호10자리)
+            pwd_2dight (str): 카드비밀번호 앞 2자리 (법인카드의 경우 생략가능)
+            pg (str): API 방식 비인증 PG설정이 2개 이상인 경우, 결제가 진행되길 원하는 PG사를 지정하실 수 있습니다.
+            customer_name (str): 고객(카드소지자) 관리용 성함
+            customer_tel (str): 고객(카드소지자) 전화번호
+            customer_email (str): 고객(카드소지자) Email
+            customer_addr (str): 고객(카드소지자) 주소
+            customer_postcode (str): 고객(카드소지자) 우편번호
+
+        Returns:
+            IamportResponse
+        """
+        params = self._build_params(**{
+            'card_number': card_number,
+            'expiry': expiry,
+            'birth': birth,
+            'pwd_2dight': pwd_2dight,
+            'pg': pg,
+            'customer_name': customer_name,
+            'customer_tel': customer_tel,
+            'customer_email': customer_email,
+            'customer_addr': customer_addr,
+            'customer_postcode': customer_postcode,
+        })
+        return self._post('/customers/{customer_uid}'.format(customer_uid=customer_uid), **params)
+
+    def delete_customers(self, customer_uid):
+        """구매자의 빌링키 정보 삭제(DB에서 빌링키를 삭제[delete] 합니다)
+
+        Args:
+            customer_uid (str): 구매자 고유 번호
+
+        Returns:
+            IamportResponse
+        """
+        return self._delete('/customers/{customer_uid}'.format(customer_uid=customer_uid))
+
+    def get_customers_payments(self, customer_uid, page=None):
+        """구매자의 빌링키로 결제된 결제목록 조회
+
+        Args:
+            customer_uid (str): 구매자 고유번
+            page (int): 페이징 페이지. 1부터 시작
+
+        Returns:
+            IamportResponse
+        """
+        params = self._build_params(page=page)
+        return self._get('/customers/{customer_uid}/payments'.format(customer_uid=customer_uid), **params)
