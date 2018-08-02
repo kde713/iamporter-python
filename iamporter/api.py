@@ -192,3 +192,95 @@ class Subscribe(BaseApi):
         """
         params = self._build_params(page=page)
         return self._get('/customers/{customer_uid}/payments'.format(customer_uid=customer_uid), **params)
+
+    def post_payments_onetime(self, merchant_uid, amount, card_number, expiry, birth, pwd_2dight=None,
+                              vat=None, customer_uid=None, pg=None, name=None,
+                              buyer_name=None, buyer_email=None, buyer_tel=None, buyer_addr=None, buyer_postcode=None,
+                              card_quota=None, custom_data=None):
+        """구매자로부터 별도의 인증과정을 거치지 않고, 카드정보만으로 결제를 진행하는 API
+        customer_uid를 전달해주시면 결제 후 다음 번 결제를 위해 성공된 결제에 사용된 빌링키를 저장해두게되고, customer_uid가 없는 경우 저장되지 않습니다.
+        동일한 merchant_uid는 재사용이 불가능하며 고유한 값을 전달해주셔야 합니다.
+        빌링키 저장 시, buyer_email, buyer_name 등의 정보는 customer 부가정보인 customer_email, customer_name 등으로 함께 저장됩니다.
+        .post_customers 참조
+
+        Args:
+            merchant_uid (str): 가맹점 거래 고유번호
+            amount (float): 결제금액
+            card_number (str): 카드번호 (dddd-dddd-dddd-dddd)
+            expiry (str): 카드 유효기간 (YYYY-MM)
+            birth (str): 생년월일6자리 (법인카드의 경우 사업자등록번호10자리)
+            pwd_2dight (str): 카드비밀번호 앞 2자리 (법인카드의 경우 생략가능)
+            vat (float): 결제금액 중 부가세 금액 (파라메터가 누락되면 10%로 자동 계산됨)
+            customer_uid (str): string 타입의 고객 고유번호.
+            pg (str): API 방식 비인증 PG설정이 2개 이상인 경우, 결제가 진행되길 원하는 PG사를 지정하실 수 있습니다.
+            name (str): 주문명
+            buyer_name (str): 주문자명
+            buyer_email (str): 주문자 E-mail주소
+            buyer_tel (str): 주문자 전화번호
+            buyer_addr (str): 주문자 주소
+            buyer_postcode (str): 주문자 우편번
+            card_quota (int): 카드할부개월수. 2 이상의 integer 할부개월수 적용 (결제금액 50,000원 이상 한정)
+            custom_data (str): 거래정보와 함께 저장할 추가 정보
+
+        Returns:
+            IamportResponse
+        """
+        params = self._build_params(**{
+            'merchant_uid': merchant_uid,
+            'amount': amount,
+            'card_number': card_number,
+            'expiry': expiry,
+            'birth': birth,
+            'pwd_2dight': pwd_2dight,
+            'vat': vat,
+            'customer_uid': customer_uid,
+            'pg': pg,
+            'name': name,
+            'buyer_name': buyer_name,
+            'buyer_email': buyer_email,
+            'buyer_tel': buyer_tel,
+            'buyer_addr': buyer_addr,
+            'buyer_postcode': buyer_postcode,
+            'card_quota': card_quota,
+            'custom_data': custom_data,
+        })
+        return self._post('/payments/onetime', **params)
+
+    def post_payments_again(self, customer_uid, merchant_uid, amount, name, vat=None,
+                            buyer_name=None, buyer_email=None, buyer_tel=None, buyer_addr=None, buyer_postcode=None,
+                            card_quota=None, custom_data=None):
+        """저장된 빌링키로 재결제를 하는 경우 사용됩니다.
+        .post_payments_onetime 또는 Subscribe.post_customers 로 등록된 빌링키가 있을 때 매칭되는 customer_uid로 재결제를 진행할 수 있습니다.
+
+        Args:
+            customer_uid (str): string 타입의 고객 고유번호
+            merchant_uid (str): 가맹점 거래 고유번호
+            amount (float): 결제금액
+            name (str): 주문명
+            vat (float): 결제금액 중 부가세 금액(파라메터가 누락되면 10%로 자동 계산됨)
+            buyer_name (str): 주문자명
+            buyer_email (str): 주문자 E-mail주소
+            buyer_tel (str): 주문자 전화번호
+            buyer_addr (str): 주문자 주소
+            buyer_postcode (str): 주문자 우편번
+            card_quota (int): 카드할부개월수. 2 이상의 integer 할부개월수 적용 (결제금액 50,000원 이상 한정)
+            custom_data (str): 거래정보와 함께 저장할 추가 정보
+
+        Returns:
+            IamportResponse
+        """
+        params = self._build_params(**{
+            'customer_uid': customer_uid,
+            'merchant_uid': merchant_uid,
+            'amount': amount,
+            'name': name,
+            'vat': vat,
+            'buyer_name': buyer_name,
+            'buyer_email': buyer_email,
+            'buyer_tel': buyer_tel,
+            'buyer_addr': buyer_addr,
+            'buyer_postcode': buyer_postcode,
+            'card_quota': card_quota,
+            'custom_data': custom_data,
+        })
+        return self._post('/payments/again', **params)
