@@ -95,7 +95,6 @@ class BaseApi:
             session (requests.Session): API 요청에 사용할 requests Session 인스턴스
             imp_url (str): 아임포트 API URL
         """
-
         self.iamport_auth = auth
         self.requests_session = session
         self.imp_url = imp_url
@@ -104,7 +103,7 @@ class BaseApi:
         return self.imp_url + self.NAMESPACE + endpoint
 
     def _build_params(self, **kwargs):
-        """__bool__ 값이 True인 value를 가진 key만 포함된 dict를 반환합니다.
+        """None이 아닌 value를 가진 key만 포함된 dict를 반환합니다.
 
         Args:
             **kwargs
@@ -114,7 +113,7 @@ class BaseApi:
         """
         params = {}
         for key, value in kwargs.items():
-            if value:
+            if value is not None:
                 params[key] = value
         return params
 
