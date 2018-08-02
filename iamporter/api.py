@@ -1,6 +1,7 @@
 from .base import IamportResponse, BaseApi
 
-__all__ = ["Payments", "Subscribe"]
+__all__ = ["Certifications", "Cards", "Banks", "Escrows", "Naver", "Payco",
+           "Payments", "Receipts", "Subscribe", "VBanks", ]
 
 
 class Certifications(BaseApi):
