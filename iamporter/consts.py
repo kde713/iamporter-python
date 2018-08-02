@@ -1,1 +1,14 @@
 IAMPORT_API_URL = "https://api.iamport.kr/"
+
+IMP_STATUS_ALL = "all"
+IMP_STATUS_READY = "ready"
+IMP_STATUS_PAID = "paid"
+IMP_STATUS_CANCELED = "cancelled"
+IMP_STATUS_FAILED = "failed"
+
+IMP_SORTING_STARTED_DESC = "-started"
+IMP_SORTING_STARTED_ASC = "started"
+IMP_SORTING_PAID_DESC = "-paid"
+IMP_SORTING_PAID_ASC = "paid"
+IMP_SORTING_UPDATED_DESC = "-updated"
+IMP_SORTING_UPDATED_ASC = "updated"
