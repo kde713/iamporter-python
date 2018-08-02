@@ -3,6 +3,30 @@ from .base import IamportResponse, BaseApi
 __all__ = ["Payments", "Subscribe"]
 
 
+class Certifications(BaseApi):
+    NAMESPACE = "certifications"
+
+
+class Cards(BaseApi):
+    NAMESPACE = "cards"
+
+
+class Banks(BaseApi):
+    NAMESPACE = "banks"
+
+
+class Escrows(BaseApi):
+    NAMESPACE = "escrows"
+
+
+class Naver(BaseApi):
+    NAMESPACE = "naver"
+
+
+class Payco(BaseApi):
+    NAMESPACE = "payco"
+
+
 class Payments(BaseApi):
     NAMESPACE = "payments"
 
@@ -118,6 +142,10 @@ class Payments(BaseApi):
             'refund_account': refund_account,
         })
         return self._post('/cancel', **params)
+
+
+class Receipts(BaseApi):
+    NAMESPACE = "receipts"
 
 
 class Subscribe(BaseApi):
@@ -284,3 +312,7 @@ class Subscribe(BaseApi):
             'custom_data': custom_data,
         })
         return self._post('/payments/again', **params)
+
+
+class VBanks(BaseApi):
+    NAMESPACE = "vbanks"
