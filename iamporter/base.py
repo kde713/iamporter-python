@@ -86,6 +86,7 @@ class BaseApi:
     Attributes:
         requests_session (requests.Session): API 호출에 사용될 requests Session 인스턴스
     """
+    NAMESPACE = ""
 
     def __init__(self, auth, session=None, imp_url=IAMPORT_API_URL):
         """
@@ -98,6 +99,9 @@ class BaseApi:
         self.iamport_auth = auth
         self.requests_session = session
         self.imp_url = imp_url
+
+    def _build_url(self, endpoint):
+        return self.imp_url + self.NAMESPACE + endpoint
 
     def _build_params(self, **kwargs):
         """__bool__ 값이 True인 value를 가진 key만 포함된 dict를 반환합니다.
@@ -126,9 +130,9 @@ class BaseApi:
         """
         if isinstance(self.requests_session, requests.Session):
             return IamportResponse(
-                self.requests_session.get(self.imp_url + endpoint, auth=self.iamport_auth, params=kwargs))
+                self.requests_session.get(self._build_url(endpoint), auth=self.iamport_auth, params=kwargs))
 
-        return IamportResponse(requests.get(self.imp_url + endpoint, auth=self.iamport_auth, params=kwargs))
+        return IamportResponse(requests.get(self._build_url(endpoint), auth=self.iamport_auth, params=kwargs))
 
     def _post(self, endpoint, **kwargs):
         """POST 요청을 보내고 그 결과를 IamportResponse 객체로 리턴합니다.
@@ -142,9 +146,9 @@ class BaseApi:
         """
         if isinstance(self.requests_session, requests.Session):
             return IamportResponse(
-                self.requests_session.post(self.imp_url + endpoint, auth=self.iamport_auth, data=kwargs))
+                self.requests_session.post(self._build_url(endpoint), auth=self.iamport_auth, data=kwargs))
 
-        return IamportResponse(requests.post(self.imp_url + endpoint, auth=self.iamport_auth, data=kwargs))
+        return IamportResponse(requests.post(self._build_url(endpoint), auth=self.iamport_auth, data=kwargs))
 
     def _delete(self, endpoint):
         """DELETE 요청을 보내고 그 결과를 IamportResponse 객체로 리턴합니다.
@@ -157,6 +161,6 @@ class BaseApi:
         """
         if isinstance(self.requests_session, requests.Session):
             return IamportResponse(
-                self.requests_session.delete(self.imp_url + endpoint, auth=self.iamport_auth))
+                self.requests_session.delete(self._build_url(endpoint), auth=self.iamport_auth))
 
-        return IamportResponse(requests.delete(self.imp_url + endpoint, auth=self.iamport_auth))
+        return IamportResponse(requests.delete(self._build_url(endpoint), auth=self.iamport_auth))
