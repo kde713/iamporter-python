@@ -1,9 +1,9 @@
 from requests import Session
 from requests.adapters import HTTPAdapter
 
-from .base import IamportAuth
+from .base import IamportAuth, IamportResponse
 from .errors import ImpUnAuthorized, ImpApiError
-from .api import Payments
+from .api import Payments, Subscribe
 
 __all__ = ['Iamporter']
 
@@ -37,6 +37,22 @@ class Iamporter:
         requests_adapter = HTTPAdapter(max_retries=3)
         self.requests_session.mount('https://', requests_adapter)
 
+    @property
+    def _api_kwargs(self):
+        return {'auth': self.imp_auth, 'session': self.requests_session}
+
+    def _process_response(self, response):
+        """
+        Args:
+            response (IamportResponse)
+
+        Returns:
+            dict
+        """
+        if not response.is_succeed:
+            raise ImpApiError(response)
+        return response.data
+
     def find_payment(self, imp_uid=None, merchant_uid=None):
         """아임포트 고유번호 또는 가맹점지정 고유번호로 결제내역을 확인합니다
 
@@ -47,7 +63,7 @@ class Iamporter:
         Returns:
             dict
         """
-        api_instance = Payments(auth=self.imp_auth, session=self.requests_session)
+        api_instance = Payments(**self._api_kwargs)
         if imp_uid:
             response = api_instance.get(imp_uid)
         elif merchant_uid:
@@ -55,10 +71,7 @@ class Iamporter:
         else:
             raise KeyError('imp_uid와 merchant_uid 중 하나를 반드시 지정해야합니다.')
 
-        if not response.is_succeed:
-            raise ImpApiError(response)
-
-        return response.data
+        return self._process_response(response)
 
     def cancel_payment(self, imp_uid=None, merchant_uid=None, amount=None, tax_free=None, reason=None):
         """승인된 결제를 취소합니다.
@@ -73,12 +86,75 @@ class Iamporter:
         Returns:
             dict
         """
-        api_instance = Payments(auth=self.imp_auth, session=self.requests_session)
+        api_instance = Payments(**self._api_kwargs)
         response = api_instance.post_cancel(imp_uid=imp_uid, merchant_uid=merchant_uid,
                                             amount=amount, tax_free=tax_free,
                                             reason=reason, )
 
-        if not response.is_succeed:
-            raise ImpApiError(response)
+        return self._process_response(response)
 
-        return response.data
+    def create_billkey(self, customer_uid=None, card_number=None, expiry=None, birth=None, pwd_2dight=None, pg=None,
+                       customer_name=None, customer_tel=None, customer_email=None, customer_addr=None,
+                       customer_postcode=None):
+        """정기결제 등에 사용하는 비인증결제를 위한 빌링키를 발급합니다.
+
+        Args:
+            customer_uid (str): 구매자 고유 번호
+            card_number (str): 카드번호 (dddd-dddd-dddd-dddd)
+            expiry (str): 카드 유효기간 (YYYY-MM)
+            birth (str): 생년월일6자리 (법인카드의 경우 사업자등록번호10자리)
+            pwd_2dight (str): 카드비밀번호 앞 2자리 (법인카드의 경우 생략가능)
+            pg (str): API 방식 비인증 PG설정이 2개 이상인 경우, 결제가 진행되길 원하는 PG사를 지정하실 수 있습니다.
+            customer_name (str): 고객(카드소지자) 관리용 성함
+            customer_tel (str): 고객(카드소지자) 전화번호
+            customer_email (str): 고객(카드소지자) Email
+            customer_addr (str): 고객(카드소지자) 주소
+            customer_postcode (str): 고객(카드소지자) 우편번호
+
+        Returns:
+            dict
+        """
+        if not (customer_uid and card_number and expiry and birth):
+            raise KeyError('customer_uid, card_number, expiry, birth는 필수값입니다.')
+
+        api_instance = Subscribe(**self._api_kwargs)
+        response = api_instance.post_customers(customer_uid, card_number, expiry, birth, pwd_2dight=pwd_2dight, pg=pg,
+                                               customer_name=customer_name, customer_tel=customer_tel,
+                                               customer_email=customer_email, customer_addr=customer_addr,
+                                               customer_postcode=customer_postcode)
+
+        return self._process_response(response)
+
+    def find_billkey(self, customer_uid=None):
+        """빌링키 정보를 조회합니다
+
+        Args:
+            customer_uid (str): 구매자 고유번호
+
+        Returns:
+            dict
+        """
+        if not customer_uid:
+            raise KeyError('customer_uid는 필수값입니다.')
+
+        api_instance = Subscribe(**self._api_kwargs)
+        response = api_instance.get_customers(customer_uid)
+
+        return self._process_response(response)
+
+    def delete_billkey(self, customer_uid=None):
+        """빌링키를 삭제합니다
+
+        Args:
+            customer_uid (str): 구매자 고유번호
+
+        Returns:
+            dict
+        """
+        if not customer_uid:
+            raise KeyError('customer_uid는 필수값입니다.')
+
+        api_instance = Subscribe(**self._api_kwargs)
+        response = api_instance.delete_customers(customer_uid)
+
+        return self._process_response(response)
