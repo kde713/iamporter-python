@@ -127,8 +127,8 @@ class BaseApi:
         if isinstance(self.requests_session, requests.Session):
             return IamportResponse(
                 self.requests_session.get(self.imp_url + endpoint, auth=self.iamport_auth, params=kwargs))
-        else:
-            return IamportResponse(requests.get(self.imp_url + endpoint, auth=self.iamport_auth, params=kwargs))
+
+        return IamportResponse(requests.get(self.imp_url + endpoint, auth=self.iamport_auth, params=kwargs))
 
     def _post(self, endpoint, **kwargs):
         """POST 요청을 보내고 그 결과를 IamportResponse 객체로 리턴합니다.
@@ -143,5 +143,20 @@ class BaseApi:
         if isinstance(self.requests_session, requests.Session):
             return IamportResponse(
                 self.requests_session.post(self.imp_url + endpoint, auth=self.iamport_auth, data=kwargs))
-        else:
-            return IamportResponse(requests.post(self.imp_url + endpoint, auth=self.iamport_auth, data=kwargs))
+
+        return IamportResponse(requests.post(self.imp_url + endpoint, auth=self.iamport_auth, data=kwargs))
+
+    def _delete(self, endpoint):
+        """DELETE 요청을 보내고 그 결과를 IamportResponse 객체로 리턴합니다.
+
+        Args:
+            endpoint (str): API Endpoint
+
+        Returns:
+            IamportResponse
+        """
+        if isinstance(self.requests_session, requests.Session):
+            return IamportResponse(
+                self.requests_session.delete(self.imp_url + endpoint, auth=self.iamport_auth))
+
+        return IamportResponse(requests.delete(self.imp_url + endpoint, auth=self.iamport_auth))
