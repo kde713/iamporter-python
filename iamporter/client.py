@@ -88,6 +88,9 @@ class Iamporter:
         Returns:
             dict
         """
+        if not (imp_uid or merchant_uid):
+            raise KeyError('imp_uid와 merchant_uid 중 하나를 반드시 지정해야합니다.')
+
         api_instance = Payments(**self._api_kwargs)
         response = api_instance.post_cancel(imp_uid=imp_uid, merchant_uid=merchant_uid,
                                             amount=amount, tax_free=tax_free,
