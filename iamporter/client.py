@@ -37,6 +37,10 @@ class Iamporter:
         requests_adapter = HTTPAdapter(max_retries=3)
         self.requests_session.mount('https://', requests_adapter)
 
+    def __del__(self):
+        if getattr(self, 'requests_session', None):
+            self.requests_session.close()
+
     @property
     def _api_kwargs(self):
         return {'auth': self.imp_auth, 'session': self.requests_session}
@@ -49,7 +53,7 @@ class Iamporter:
         Returns:
             dict
         """
-        if response.status == 403:
+        if response.status == 401:
             raise ImpUnAuthorized(response.message)
         if not response.is_succeed:
             raise ImpApiError(response)
@@ -88,6 +92,9 @@ class Iamporter:
         Returns:
             dict
         """
+        if not (imp_uid or merchant_uid):
+            raise KeyError('imp_uid와 merchant_uid 중 하나를 반드시 지정해야합니다.')
+
         api_instance = Payments(**self._api_kwargs)
         response = api_instance.post_cancel(imp_uid=imp_uid, merchant_uid=merchant_uid,
                                             amount=amount, tax_free=tax_free,
