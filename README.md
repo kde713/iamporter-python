@@ -4,6 +4,7 @@
 [![CircleCI](https://img.shields.io/circleci/project/github/kde713/iamporter-python.svg?logo=circleci)](https://circleci.com/gh/kde713/iamporter-python)
 [![CodeCov](https://img.shields.io/codecov/c/github/kde713/iamporter-python.svg)](https://codecov.io/gh/kde713/iamporter-python)
 [![CodeFactor](https://www.codefactor.io/repository/github/kde713/iamporter-python/badge)](https://www.codefactor.io/repository/github/kde713/iamporter-python)
+[![PyPI Version](https://img.shields.io/pypi/v/iamporter.svg)](https://pypi.org/project/iamporter/)
 ![License](https://img.shields.io/github/license/kde713/iamporter-python.svg?logo=github)
 
 **iamporter-python** 는 [아임포트](https://www.iamport.kr/)에서 제공하는 REST API를 쉽게 활용하기 위해 작성된 Python 클라이언트입니다.
