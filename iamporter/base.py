@@ -72,6 +72,9 @@ class IamportAuth(AuthBase):
         if auth_response.is_succeed:
             self.token = auth_response.data.get('access_token', None)
 
+        if session:
+            session.close()
+
         if self.token is None:
             raise ImpUnAuthorized(auth_response.message)
 

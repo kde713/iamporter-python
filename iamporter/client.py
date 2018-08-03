@@ -37,6 +37,10 @@ class Iamporter:
         requests_adapter = HTTPAdapter(max_retries=3)
         self.requests_session.mount('https://', requests_adapter)
 
+    def __del__(self):
+        if getattr(self, 'requests_session', None):
+            self.requests_session.close()
+
     @property
     def _api_kwargs(self):
         return {'auth': self.imp_auth, 'session': self.requests_session}
