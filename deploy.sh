@@ -8,3 +8,5 @@ if [ $# -ge 1 ] && [ $1 == "test" ]; then
 else
     twine upload dist/*
 fi
+
+rm -rf build
