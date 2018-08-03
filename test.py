@@ -79,6 +79,7 @@ class TestIamporter(unittest.TestCase):
         self.client = Iamporter(imp_auth=self.imp_auth)
 
     def test_init(self):
+        self.assertRaises(errors.ImpUnAuthorized, Iamporter, imp_key=None)
         self.assertRaises(errors.ImpUnAuthorized, Iamporter, imp_key="invalid_key", imp_secret="invalid_secret")
 
     def test_find_payment(self):
