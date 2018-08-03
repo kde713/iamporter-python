@@ -53,7 +53,7 @@ class Iamporter:
         Returns:
             dict
         """
-        if response.status == 403:
+        if response.status == 401:
             raise ImpUnAuthorized(response.message)
         if not response.is_succeed:
             raise ImpApiError(response)
