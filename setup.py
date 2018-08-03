@@ -35,9 +35,9 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
 
-    keywords='iamport iamporter import',
+    keywords=['iamport', 'import', 'payment', 'iamporter'],
 
-    packages=find_packages(exclude=['samples']),
+    packages=find_packages(exclude=['test', 'tests', 'docs', 'examples']),
 
     install_requires=[
         'requests',
