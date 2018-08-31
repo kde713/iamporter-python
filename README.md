@@ -53,6 +53,7 @@ REST API를 사용하기 편하게 Wrapping한 Iamporter 객체를 통해 라이
 
 사용하기 위해 객체를 초기화합니다. 
 `imp_auth` 인자에 `IamportAuth` 인스턴스를 전달하여 객체를 초기화할 수도 있습니다.
+(테스트를 위해 `imp_url` 인자에 별도로 구축한 목업 서버 url을 넘겨 초기화할 수도 있습니다. 기본값은 `https://api.iamport.kr/` 입니다.)
 
 ```python
 from iamporter import Iamporter
