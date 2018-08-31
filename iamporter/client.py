@@ -4,6 +4,7 @@ from requests.adapters import HTTPAdapter
 from .base import IamportAuth, IamportResponse
 from .errors import ImpUnAuthorized, ImpApiError
 from .api import Payments, Subscribe
+from .consts import IAMPORT_API_URL
 
 __all__ = ['Iamporter']
 
@@ -14,10 +15,11 @@ class Iamporter:
 
     Attributes:
         imp_auth (IamportAuth): 아임포트 인증 인스턴스
+        imp_url (str): Iamport REST API Host
         requests_session (Session): 아임포트 API 호출에 사용될 세션 객체
     """
 
-    def __init__(self, imp_key=None, imp_secret=None, imp_auth=None):
+    def __init__(self, imp_key=None, imp_secret=None, imp_auth=None, imp_url=IAMPORT_API_URL):
         """
         imp_key와 imp_secret을 전달하거나 IamportAuth 인스턴스를 직접 imp_auth로 넘겨 초기화할 수 있습니다.
 
@@ -25,6 +27,7 @@ class Iamporter:
             imp_key (str): Iamport REST API Key
             imp_secret (str): Iamport REST API Secret
             imp_auth (IamportAuth): IamportAuth 인증 인스턴스
+            imp_url (str): Iamport REST API Host. 기본값은 https://api.iamport.kr/
         """
         if isinstance(imp_auth, IamportAuth):
             self.imp_auth = imp_auth
@@ -32,6 +35,8 @@ class Iamporter:
             self.imp_auth = IamportAuth(imp_key, imp_secret)
         else:
             raise ImpUnAuthorized("인증정보가 전달되지 않았습니다.")
+
+        self.imp_url = imp_url
 
         self.requests_session = Session()
         requests_adapter = HTTPAdapter(max_retries=3)
@@ -43,7 +48,7 @@ class Iamporter:
 
     @property
     def _api_kwargs(self):
-        return {'auth': self.imp_auth, 'session': self.requests_session}
+        return {'auth': self.imp_auth, 'session': self.requests_session, 'imp_url': self.imp_url}
 
     def _process_response(self, response):
         """
