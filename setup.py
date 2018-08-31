@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import ast
 import re
 
@@ -40,7 +42,7 @@ setup(
     packages=find_packages(exclude=['test', 'tests', 'docs', 'examples']),
 
     install_requires=[
-        'requests',
+        'requests~=2.19.1',
     ],
 
     python_requires='>=3',
