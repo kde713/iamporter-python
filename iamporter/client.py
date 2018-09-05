@@ -32,7 +32,7 @@ class Iamporter:
         if isinstance(imp_auth, IamportAuth):
             self.imp_auth = imp_auth
         elif imp_key and imp_secret:
-            self.imp_auth = IamportAuth(imp_key, imp_secret)
+            self.imp_auth = IamportAuth(imp_key, imp_secret, imp_url=imp_url)
         else:
             raise ImpUnAuthorized("인증정보가 전달되지 않았습니다.")
 
