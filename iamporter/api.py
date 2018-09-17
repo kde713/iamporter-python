@@ -1,8 +1,5 @@
 from .base import IamportResponse, BaseApi
 
-__all__ = ["Certifications", "Cards", "Banks", "Escrows", "Naver", "Payco",
-           "Payments", "Receipts", "Subscribe", "VBanks", ]
-
 
 class Certifications(BaseApi):
     NAMESPACE = "certifications"

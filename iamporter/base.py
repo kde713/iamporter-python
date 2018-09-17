@@ -1,10 +1,19 @@
+import urllib.parse
+
 import requests
 from requests.auth import AuthBase
 
 from .consts import IAMPORT_API_URL
 from .errors import ImpUnAuthorized
 
-__all__ = ['IamportResponse', 'IamportAuth', 'BaseApi', ]
+
+def build_url(base_url: str, path: str = "/"):
+    extracted_base_url = urllib.parse.urlparse(base_url)
+    if path[0] != "/":
+        path = "/" + path
+    return urllib.parse.urlunparse((
+        extracted_base_url[0], extracted_base_url[1], path, '', '', ''
+    ))
 
 
 class IamportResponse:
@@ -62,7 +71,7 @@ class IamportAuth(AuthBase):
 
         self.token = None
 
-        api_endpoint = imp_url + '/users/getToken'
+        api_endpoint = build_url(imp_url, '/users/getToken')
         api_payload = {'imp_key': imp_key, 'imp_secret': imp_secret}
 
         auth_response = IamportResponse(
@@ -103,7 +112,7 @@ class BaseApi:
         self.imp_url = imp_url
 
     def _build_url(self, endpoint):
-        return self.imp_url + self.NAMESPACE + endpoint
+        return build_url(self.imp_url, self.NAMESPACE + endpoint)
 
     def _build_params(self, **kwargs):
         """None이 아닌 value를 가진 key만 포함된 dict를 반환합니다.

@@ -6,8 +6,6 @@ from .errors import ImpUnAuthorized, ImpApiError
 from .api import Payments, Subscribe
 from .consts import IAMPORT_API_URL
 
-__all__ = ['Iamporter']
-
 
 class Iamporter:
     """Iamport Client 객체
