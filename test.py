@@ -1,10 +1,20 @@
 import unittest
 
 from iamporter import Iamporter, IamportAuth, IamportResponse, errors, consts
-from iamporter.base import BaseApi
+from iamporter.base import BaseApi, build_url
 
 TEST_IMP_KEY = "imp_apikey"
 TEST_IMP_SECRET = "ekKoeW8RyKuT0zgaZsUtXXTLQ4AhPFW3ZGseDA6bkA5lamv9OqDMnxyeB9wqOsuO9W3Mx9YSJ4dTqJ3f"
+
+
+class TestUrlBuilder(unittest.TestCase):
+    def test_build_url(self):
+        self.assertEqual(build_url("https://www.test.com", "not_slashed/path"),
+                         "https://www.test.com/not_slashed/path")
+        self.assertEqual(build_url("http://www.slashed.host/", "also_slashed/path"),
+                         "http://www.slashed.host/also_slashed/path")
+        self.assertEqual(build_url("http://www.withport.com:12345", "not_slashed/path"),
+                         "http://www.withport.com:12345/not_slashed/path")
 
 
 class TestIamportResponse(unittest.TestCase):
