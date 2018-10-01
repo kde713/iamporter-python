@@ -98,7 +98,7 @@ client.create_billkey(
     card_number="1234-1234-1234-1234",
     expiry="2022-06",
     birth="960712",
-    pwd_2dight="12",
+    pwd_2digit="12",
     customer_info={
         'name': "소유자 이름",
         'tel': "01000000000",
@@ -140,7 +140,7 @@ client.create_payment(
     card_number="1234-1234-1234-1234",
     expiry="2022-06",
     birth="960712",
-    pwd_2dight="12",
+    pwd_2digit="12",
     buyer_info={
         'name': "구매자 이름",
         'tel': "01000000000",
