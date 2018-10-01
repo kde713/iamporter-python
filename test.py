@@ -126,7 +126,7 @@ class TestIamporter(unittest.TestCase):
 
         try:
             self.client.create_billkey(customer_uid="customer_1234", card_number="1111-1111-1111-1111",
-                                       expiry="2022-06", birth="960714", pwd_2dight="12")
+                                       expiry="2022-06", birth="960714", pwd_2digit="12")
         except errors.ImpApiError as e:
             self.assertEqual(e.response.code, -1)
             self.assertIn("유효하지않은 카드번호를 입력하셨습니다.", e.response.message)
