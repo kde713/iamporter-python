@@ -105,7 +105,7 @@ class Iamporter:
 
         return self._process_response(response)
 
-    def create_billkey(self, customer_uid=None, card_number=None, expiry=None, birth=None, pwd_2dight=None, pg=None,
+    def create_billkey(self, customer_uid=None, card_number=None, expiry=None, birth=None, pwd_2digit=None, pg=None,
                        customer_info=None):
         """정기결제 등에 사용하는 비인증결제를 위한 빌링키를 발급합니다.
 
@@ -127,7 +127,7 @@ class Iamporter:
             customer_info = {}
 
         api_instance = Subscribe(**self._api_kwargs)
-        response = api_instance.post_customers(customer_uid, card_number, expiry, birth, pwd_2dight=pwd_2dight, pg=pg,
+        response = api_instance.post_customers(customer_uid, card_number, expiry, birth, pwd_2digit=pwd_2digit, pg=pg,
                                                customer_name=customer_info.get('name'),
                                                customer_tel=customer_info.get('tel'),
                                                customer_email=customer_info.get('email'),
