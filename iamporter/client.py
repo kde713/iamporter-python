@@ -114,7 +114,7 @@ class Iamporter:
             card_number (str): 카드번호 (dddd-dddd-dddd-dddd)
             expiry (str): 카드 유효기간 (YYYY-MM)
             birth (str): 생년월일6자리 (법인카드의 경우 사업자등록번호10자리)
-            pwd_2dight (str): 카드비밀번호 앞 2자리 (법인카드의 경우 생략가능)
+            pwd_2digit (str): 카드비밀번호 앞 2자리 (법인카드의 경우 생략가능)
             pg (str): API 방식 비인증 PG설정이 2개 이상인 경우, 결제가 진행되길 원하는 PG사를 지정하실 수 있습니다.
             customer_info (dict): 고객(카드소지자) 정보 (name, tel, email, addr, postcode)
 
@@ -171,7 +171,7 @@ class Iamporter:
         return self._process_response(response)
 
     def create_payment(self, merchant_uid=None, customer_uid=None, name=None, amount=None, vat=None,
-                       card_number=None, expiry=None, birth=None, pwd_2dight=None, pg=None,
+                       card_number=None, expiry=None, birth=None, pwd_2digit=None, pg=None,
                        buyer_info=None, card_quota=None, custom_data=None):
         """카드정보 또는 빌링키로 결제를 요청합니다
         카드정보를 지정하여 일회성 키인 결제를 요청할 수 있으며, 빌링키(customer_uid)를 지정해 재결제를 요청할 수 있습니다.
@@ -186,7 +186,7 @@ class Iamporter:
             card_number (str): 카드번호 (dddd-dddd-dddd-dddd)
             expiry (str): 카드 유효기간 (YYYY-MM)
             birth (str): 생년월일6자리 (법인카드의 경우 사업자등록번호10자리)
-            pwd_2dight (str): 카드비밀번호 앞 2자리 (법인카드의 경우 생략가능)
+            pwd_2digit (str): 카드비밀번호 앞 2자리 (법인카드의 경우 생략가능)
             pg (str): API 방식 비인증 PG설정이 2개 이상인 경우, 결제가 진행되길 원하는 PG사를 지정하실 수 있습니다.
             buyer_info (dict): 구매자 정보 (name, tel, email, addr, postcode)
             card_quota (int): 카드할부개월수. 2 이상의 integer 할부개월수 적용 (결제금액 50,000원 이상 한정)
@@ -205,7 +205,7 @@ class Iamporter:
         api_instance = Subscribe(**self._api_kwargs)
         if card_number and expiry and birth:
             response = api_instance.post_payments_onetime(merchant_uid, amount, card_number, expiry, birth,
-                                                          pwd_2dight=pwd_2dight, vat=vat, customer_uid=customer_uid,
+                                                          pwd_2digit=pwd_2digit, vat=vat, customer_uid=customer_uid,
                                                           pg=pg, name=name,
                                                           buyer_name=buyer_info.get('name'),
                                                           buyer_email=buyer_info.get('email'),

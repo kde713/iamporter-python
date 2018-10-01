@@ -219,7 +219,7 @@ class Subscribe(BaseApi):
         params = self._build_params(page=page)
         return self._get('/customers/{customer_uid}/payments'.format(customer_uid=customer_uid), **params)
 
-    def post_payments_onetime(self, merchant_uid, amount, card_number, expiry, birth, pwd_2dight=None,
+    def post_payments_onetime(self, merchant_uid, amount, card_number, expiry, birth, pwd_2digit=None,
                               vat=None, customer_uid=None, pg=None, name=None,
                               buyer_name=None, buyer_email=None, buyer_tel=None, buyer_addr=None, buyer_postcode=None,
                               card_quota=None, custom_data=None):
@@ -235,7 +235,7 @@ class Subscribe(BaseApi):
             card_number (str): 카드번호 (dddd-dddd-dddd-dddd)
             expiry (str): 카드 유효기간 (YYYY-MM)
             birth (str): 생년월일6자리 (법인카드의 경우 사업자등록번호10자리)
-            pwd_2dight (str): 카드비밀번호 앞 2자리 (법인카드의 경우 생략가능)
+            pwd_2digit (str): 카드비밀번호 앞 2자리 (법인카드의 경우 생략가능)
             vat (float): 결제금액 중 부가세 금액 (파라메터가 누락되면 10%로 자동 계산됨)
             customer_uid (str): string 타입의 고객 고유번호.
             pg (str): API 방식 비인증 PG설정이 2개 이상인 경우, 결제가 진행되길 원하는 PG사를 지정하실 수 있습니다.
@@ -257,7 +257,7 @@ class Subscribe(BaseApi):
             'card_number': card_number,
             'expiry': expiry,
             'birth': birth,
-            'pwd_2dight': pwd_2dight,
+            'pwd_2digit': pwd_2digit,
             'vat': vat,
             'customer_uid': customer_uid,
             'pg': pg,
