@@ -9,6 +9,7 @@ verify_ssl = true
 requests = "~=2.21.0"
 coverage = "*"
 codecov = "*"
+twine = "*"
 
 [requires]
 python_version = "3.7"
