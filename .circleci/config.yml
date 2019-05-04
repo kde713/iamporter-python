@@ -41,9 +41,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
-            coverage run ./test.py
-            codecov
+            pipenv run coverage run ./test.py
+            pipenv run codecov
 
       - store_artifacts:
           path: test-reports
