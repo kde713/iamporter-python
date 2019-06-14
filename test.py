@@ -151,7 +151,7 @@ class TestIamporter(unittest.TestCase):
 
     def test_create_payment_onetime(self):
         self.assertRaises(KeyError, self.client.create_payment, merchant_uid=None, name="테스트", amount=10000)
-        self.assertRaises(KeyError, self.client.create_payment, merchant_uid='test', name="테스트", amount=10000,
+        self.assertRaises(KeyError, self.client.create_payment, merchant_uid='some-special-uid', name="테스트",
                           card_number="1111-1111-1111-1111", expiry="2022-06")
 
         try:
