@@ -197,15 +197,16 @@ class Iamporter:
         """
         if not (merchant_uid and name and amount):
             raise KeyError('merchant_uid, name, amount는 필수값입니다.')
-        if not ((card_number and expiry and birth) or customer_uid):
+        if not ((card_number and expiry) or customer_uid):
             raise KeyError('카드 정보 또는 customer_uid 중 하나 이상은 반드시 포함되어야합니다.')
         if not buyer_info:
             buyer_info = {}
 
         api_instance = Subscribe(**self._api_kwargs)
-        if card_number and expiry and birth:
-            response = api_instance.post_payments_onetime(merchant_uid, amount, card_number, expiry, birth,
-                                                          pwd_2digit=pwd_2digit, vat=vat, customer_uid=customer_uid,
+        if card_number and expiry:
+            response = api_instance.post_payments_onetime(merchant_uid, amount, card_number, expiry,
+                                                          birth=birth, pwd_2digit=pwd_2digit,
+                                                          vat=vat, customer_uid=customer_uid,
                                                           pg=pg, name=name,
                                                           buyer_name=buyer_info.get('name'),
                                                           buyer_email=buyer_info.get('email'),

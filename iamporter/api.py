@@ -219,7 +219,7 @@ class Subscribe(BaseApi):
         params = self._build_params(page=page)
         return self._get('/customers/{customer_uid}/payments'.format(customer_uid=customer_uid), **params)
 
-    def post_payments_onetime(self, merchant_uid, amount, card_number, expiry, birth, pwd_2digit=None,
+    def post_payments_onetime(self, merchant_uid, amount, card_number, expiry, birth=None, pwd_2digit=None,
                               vat=None, customer_uid=None, pg=None, name=None,
                               buyer_name=None, buyer_email=None, buyer_tel=None, buyer_addr=None, buyer_postcode=None,
                               card_quota=None, custom_data=None):
