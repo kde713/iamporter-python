@@ -203,7 +203,7 @@ class Iamporter:
             buyer_info = {}
 
         api_instance = Subscribe(**self._api_kwargs)
-        if card_number and expiry and birth:
+        if card_number and expiry:
             response = api_instance.post_payments_onetime(merchant_uid, amount, card_number, expiry,
                                                           birth=birth, pwd_2digit=pwd_2digit,
                                                           vat=vat, customer_uid=customer_uid,
