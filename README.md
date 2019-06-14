@@ -157,6 +157,8 @@ client.create_payment(
 )
 ```
 
+> 비인증 해외카드 결제 역시 `.create_payment` 메소드를 사용해주시면 됩니다.
+
 
 
 ## Usage (Alternative Way)
