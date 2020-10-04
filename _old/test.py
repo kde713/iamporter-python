@@ -1,7 +1,8 @@
 import unittest
 
-from iamporter import Iamporter, IamportAuth, IamportResponse, errors, consts
-from iamporter.base import BaseApi, build_url
+from _old.iamporter import Iamporter, IamportAuth, IamportResponse, errors
+from _old.iamporter import consts
+from _old.iamporter.base import BaseApi, build_url
 
 TEST_IMP_KEY = "imp_apikey"
 TEST_IMP_SECRET = "ekKoeW8RyKuT0zgaZsUtXXTLQ4AhPFW3ZGseDA6bkA5lamv9OqDMnxyeB9wqOsuO9W3Mx9YSJ4dTqJ3f"

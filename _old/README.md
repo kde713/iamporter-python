@@ -56,7 +56,7 @@ REST API를 사용하기 편하게 Wrapping한 Iamporter 객체를 통해 라이
 (테스트를 위해 `imp_url` 인자에 별도로 구축한 목업 서버 url을 넘겨 초기화할 수도 있습니다. 기본값은 `https://api.iamport.kr/` 입니다.)
 
 ```python
-from iamporter import Iamporter
+from _old.iamporter import Iamporter
 
 client = Iamporter(imp_key="YOUR_IAMPORT_REST_API_KEY", imp_secret="YOUR_IAMPORT_REST_API_SECRET")
 ```
@@ -131,7 +131,7 @@ client.delete_billkey(customer_uid="your_customer_uid")
 카드정보를 지정한 경우 `customer_uid`를 함꼐 지정하면 해당 카드 정보로 결제 후 빌링키가 저장됩니다.
 
 ```python
-from iamporter import Iamporter
+from _old.iamporter import Iamporter
 client = Iamporter(imp_key="YOUR_IAMPORT_REST_API_KEY", imp_secret="YOUR_IAMPORT_REST_API_SECRET")
 client.create_payment(
     merchant_uid="your_merchant_uid",
@@ -170,7 +170,7 @@ Iamporter 객체에 wrapping 되어 있지 않은 API를 사용하거나, 직접
 사용하기 위해 인증객체를 만듭니다.
 
 ```python
-from iamporter import IamportAuth
+from _old.iamporter import IamportAuth
 
 auth = IamportAuth(imp_key="YOUR_IAMPORT_REST_API_KEY", imp_secret="YOUR_IAMPORT_REST_API_SECRET")
 ```
@@ -192,7 +192,7 @@ auth = IamportAuth(imp_key="YOUR_IAMPORT_REST_API_KEY", imp_secret="YOUR_IAMPORT
 ### 대응되는 Method가 추가되어 있는 API 호출
 
 ```python
-from iamporter.api import Payments
+from _old.iamporter.api import Payments
 
 api_instance = Payments(auth)
 response = api_instance.get("your_imp_uid")
@@ -201,7 +201,7 @@ response = api_instance.get("your_imp_uid")
 ### 대응되는 Method가 없는 API 호출
 
 ```python
-from iamporter.api import Escrows
+from _old.iamporter.api import Escrows
 
 api_instance = Escrows(auth)
 response = api_instance._post('/logis/{imp_uid}'.format(imp_uid="your_imp_uid"), sender="", receiver="", logis="")
