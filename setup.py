@@ -42,7 +42,7 @@ setup(
     packages=find_packages(exclude=['test', 'tests', 'docs', 'examples']),
 
     install_requires=[
-        'requests~=2.21.0',
+        'requests>=2.0.0,<3.0.0',
     ],
 
     python_requires='>=3',
